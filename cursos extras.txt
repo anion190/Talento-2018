@@ -1,0 +1,19 @@
+informática: 102
+inglês: 72
+" ": 17
+excel: 92
+autocad: 41
+técnico em química: 12
+administração: 63
+técnico em mecatrônica: 14
+hardware: 15
+logística: 53
+cursos da udemy: 21
+office: 24
+cursos da alura: 5
+photoshop: 9
+matlab: 7
+oratoria: 12
+liderança: 15
+coaching: 5
+cursos da coursera: 14
