@@ -1,0 +1,4 @@
+básico: 535
+intermedário: 813
+avançado: 403
+Não respondeu/Não tem: 1668
