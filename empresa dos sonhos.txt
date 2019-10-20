@@ -1,0 +1,21 @@
+219 tecnologia e informática : 100(google) 31(ibm) 27(3m) 14(microsoft) 11(ge) 9(apple) 9(ci&t) 8(motorola)
+54 banco: 54(itaú)
+57 engenharia e eletronica: 45(bosch) 7(siemens) 5(odebrecht)
+21 cosméticos: 21(natura)
+35 educação: 21(unicamp) 14(CNPEM)
+83 bens de consumo : 17(Unilever) 17(ambev) 16(p&g) 13(nestlé) 15(mars) 5(coca-cola)
+49 petróleo/combustível: 22 (raízen) 16(petrobrás) 11(ge) 
+26 aviação: 15(embraer) 11(ge)
+46 construção civil e mineração:14(caterpillar) 11(ge) 16(petrobrás) 5(odebrecht)
+35 eletricidade : 19(cpfl) 11(ge) 5(elektro)
+25 produtos químicos: 11(dow) 8(basf) 6(rhodia)
+17 assistência médica: 11(ge) 6(EMS)
+19 automotivos:10(honda) 9(tesla)
+20 consultoria: 8(deloitte) 6(movile) 6(bcg)
+7 envase de alimentos: 7(tetrapak)
+"multinacional" : 6
+11 espaço: 6(NASA) 5(spaceX)
+5 logística: 5(DHL)
+nao a que pague o melhor salario: 1
+391.331.038-01: 1
+a que me aceite: 1
