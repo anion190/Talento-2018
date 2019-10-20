@@ -1,0 +1,33 @@
+NA 281
+engenharia de alimentos: 34
+engenharia química: 88
+administração: 73
+engenharia civil: 91 
+estatística: 70
+ciências econômicas/economia:50
+química técnológica: 21
+farmácia: 6
+profis: 18
+química: 23
+pedagogia: 3
+enfermagem: 1
+engenharia agrícola: 54
+engenharia de produção: 45
+engenharia de computação:95
+fonoaudiologia:1
+direito:13
+geologia:29
+Educação Física:7
+Engenharia Mecânica:195
+Arquitetura e Urbanismo:11
+Publicidade e Propaganda:8
+Ciência da Computação:43
+Engenharia Ambiental:11
+Ciencias Sociais:4
+Psicologia: 8
+Física: 28
+licenciatura integrada quimica/fisica :6
+matematica aplicada e computacional: 10
+engenharia de controle e automacao: 66
+geografia: 8
+engenharia de manufatura: 14
