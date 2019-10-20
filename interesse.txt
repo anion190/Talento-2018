@@ -1,0 +1,31 @@
+ 39
+- 3
+Administração: 290
+análise: 66
+pesquisa: 662
+consultoria: 579
+financeiro: 470
+engenharia: 407
+desenvolvimento: 206
+indústria: 165
+marketing: 136
+tecnologia: 221
+logística: 88
+qualidade: 117
+vendas: 72
+saúde: 59
+projetos: 145
+educação: 92
+recursos humanos: 125
+química: 81
+p&d: 62
+gestão: 107
+supply chain 33
+comunicação: 44
+programação: 43
+informática: 43
+biologia: 43
+processos: 80
+inovação: 26
+software: 38
+bancos: 30
