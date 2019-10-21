@@ -2,6 +2,7 @@ library(dplyr)
 library(googleVis)
 library(ggmap)
 library(plotly)
+library(rgdal)
 
 # PERMITE UTILIZAR O PLOTLY
 Sys.setenv("plotly_username"="GArtoni")
@@ -19,6 +20,8 @@ table(talentos$Cidade)
 
 # 1814 pessoas não informaram suas cidades
 # 2695 informaram suas cidades
+
+
 # 1648 são de campinas 
 # 148 são de são paulo 
 # 141 de paulínia
@@ -30,17 +33,50 @@ table(talentos$Cidade)
 # 35 de indaiatuba
 
 # GRÁFICO DE BARRA COM AS 10 PRIMEIRAS CIDADES QUE TIVERAM VISITANTES NA FEIRA
-data <- data.frame(qtd = sort(table(talentos$Cidade), decreasing = T)[2:11])
+data <- data.frame(qtd = sort(table(talentos$Cidade), decreasing = TRUE)[2:11])
 colnames(data) <- c("Cidades", "QtdParticipantes")
 graph <- plot_ly(data, x = ~Cidades, y = ~QtdParticipantes, type = 'bar',
-                 marker = list(color = 'rgb(158, 202, 225)',
+                 marker = list(color = c('rgba(222,45,38,0.8)', 'rgb(158, 202, 225)', 'rgb(158, 202, 225)',
+                                         'rgb(158, 202, 225)', 'rgb(158, 202, 225)',
+                                         'rgb(158, 202, 225)','rgb(158, 202, 225)', 'rgb(158, 202, 225)',
+                                         'rgb(158, 202, 225)', 'rgb(158, 202, 225)'),
                                line = list(color = 'rgb(8,48,107)', width = 1.5))) %>% 
   layout(title = "Cidades com maior número de participantes na Feira Talento em 2018",
          xaxis = list(title = "Cidades"), 
-         yaxis = list(title = "Qtd de Participantes"))
+         yaxis = list(title = "Qtd de Participantes")) #%>%
+  #add_annotations(xref = 'Cidades', yref = 'Qtd de Participantes',
+   #            x = data$Cidades,  y = data$QtdParticipantes,
+    #          text = paste(data$QtdParticipantes),
+     #         font = list(family = 'Arial', size = 12),
+      #        showarrow = FALSE)
 
 chart_link <- api_create(graph, filename = "cities", fileopt = 'overwrite')
 chart_link
+
+# GRÁFICO DE BARRA DAS ÁREAS DE ATUAÇÃO DAS EMPRESAS DOS SONHOS (DESTAQUE PARA 10 PRIMEIRAS)
+areas.atuacao <- read.csv("~/areas_de_atuacao")
+areas.atuacao <- areas.atuacao[order(areas.atuacao$total, decreasing = TRUE),]
+graph <- plot_ly(areas.atuacao, x = ~total, y = ~area, type = 'bar', orientation = 'h',
+                 marker = list(color = c('rgba(222,45,38,0.8)', 'rgb(158, 202, 225)', 'rgb(158, 202, 225)',
+                                         'rgb(158, 202, 225)', 'rgb(158, 202, 225)',
+                                         'rgb(158, 202, 225)','rgb(158, 202, 225)', 'rgb(158, 202, 225)',
+                                         'rgb(158, 202, 225)', 'rgb(158, 202, 225)'))) %>% 
+  layout(title = "Áreas de atuação das empresas dos sonhos",
+         xaxis = list(title = "Qtd de Interessados"), 
+         yaxis = list(title = "Áreas"))#%>%
+  #add_annotations(xref = 'total', yref = 'area',
+   #               x = data$total,  y = data$area,
+    #              text = paste(data$total),
+    #              font = list(family = 'Arial', size = 12),
+    #              showarrow = FALSE)
+
+chart_link <- api_create(graph, filename = "atuationarea", fileopt = 'overwrite')
+chart_link
+
+
+
+
+
 
 # Variável Estado
 
@@ -82,7 +118,7 @@ table(talentos$Gênero)
 
 # Variável Curso 
 
-sort(table(talentos$Curso), decreasing = T)
+sort(table(talentos$Curso), decreasing = TRUE)
 
 # 705 não informaram qual curso faziam 
 # 282 engenharia mecânica 
@@ -124,12 +160,6 @@ talentos$Empresa.dos.sonhos[grep("área", talentos$Empresa.dos.sonhos)] # 7 resp
 talentos$Empresa.dos.sonhos[grep("ramo", talentos$Empresa.dos.sonhos)] # 5 
 talentos$Empresa.dos.sonhos[grep("setor", talentos$Empresa.dos.sonhos)] # 1
 
- # Vezes que a Google foi citada
-talentos$Empresa.dos.sonhos[grep("google", talentos$Empresa.dos.sonhos)] # 143
-
- # Vezes que a Microsoft foi citada
-talentos$Empresa.dos.sonhos[grep("micro", talentos$Empresa.dos.sonhos)] # 25
-
  # General Eletric 
 talentos$Empresa.dos.sonhos[grep("ge", talentos$Empresa.dos.sonhos)] # 23
 talentos$Empresa.dos.sonhos[grep("general", talentos$Empresa.dos.sonhos)] # 7
@@ -138,22 +168,20 @@ talentos$Empresa.dos.sonhos[grep("general", talentos$Empresa.dos.sonhos)] # 7
 talentos$Empresa.dos.sonhos[grep("bosch", talentos$Empresa.dos.sonhos)] # 66
 talentos$Empresa.dos.sonhos[grep("bosh", talentos$Empresa.dos.sonhos)] # 13
 
-# Natura
-talentos$Empresa.dos.sonhos[grep("natura", talentos$Empresa.dos.sonhos)] # 38
+
 
 # 
 talentos$Empresa.dos.sonhos[grep("banco", talentos$Empresa.dos.sonhos)] # 21
 talentos$Empresa.dos.sonhos[grep("bancos", talentos$Empresa.dos.sonhos)] # 4 
+talentos$Empresa.dos.sonhos[grep("btg", talentos$Empresa.dos.sonhos)] # 2
 
-# 
 talentos$Empresa.dos.sonhos[grep("unilever", talentos$Empresa.dos.sonhos)] # 40
-
+talentos$Empresa.dos.sonhos[grep("p&g", talentos$Empresa.dos.sonhos)] #35
 
 talentos$Empresa.dos.sonhos[grep("embrapa", talentos$Empresa.dos.sonhos)] # 4
 
 
-talentos$Empresa.dos.sonhos[grep("btg", talentos$Empresa.dos.sonhos)] # 2
-
+talentos$Empresa.dos.sonhos[grep("tesla", talentos$Empsa.dos.sonhos)] # 12
 talentos$Empresa.dos.sonhos[grep("mercedez", talentos$Empresa.dos.sonhos)] # 2
 talentos$Empresa.dos.sonhos[grep("honda", talentos$Empresa.dos.sonhos)] # 27
 talentos$Empresa.dos.sonhos[grep("ford", talentos$Empresa.dos.sonhos)] # 2
@@ -177,52 +205,48 @@ talentos$Empresa.dos.sonhos[grep("tetra pak", talentos$Empresa.dos.sonhos)] # 15
 
 talentos$Empresa.dos.sonhos[grep("itau", talentos$Empresa.dos.sonhos)] # 33
 
-talentos$Empresa.dos.sonhos[grep("deloitte", talentos$Empresa.dos.sonhos)] # 9
-
 talentos$Empresa.dos.sonhos[grep("cater", talentos$Empresa.dos.sonhos)] # 23
 
+talentos$Empresa.dos.sonhos[grep("clear", talentos$Empresa.dos.sonhos)] # 2
+talentos$Empresa.dos.sonhos[grep("deloitte", talentos$Empresa.dos.sonhos)] # 9
 talentos$Empresa.dos.sonhos[grep("accenture", talentos$Empresa.dos.sonhos)] # 4
 
 talentos$Empresa.dos.sonhos[grep("petro", talentos$Empresa.dos.sonhos)] # 27
 
-talentos$Empresa.dos.sonhos[grep("p&g", talentos$Empresa.dos.sonhos)] #35
-
 talentos$Empresa.dos.sonhos[grep("ambev", talentos$Empresa.dos.sonhos)] # 38
-
 talentos$Empresa.dos.sonhos[grep("heine", talentos$Empresa.dos.sonhos)] # 4
+talentos$Empresa.dos.sonhos[grep("coca", talentos$Empresa.dos.sonhos)] # 8
 
 talentos$Empresa.dos.sonhos[grep("embrae", talentos$Empresa.dos.sonhos)] # 24
+talentos$Empresa.dos.sonhos[grep("azul", talentos$Empresa.dos.sonhos)] # 6
 
-talentos$Empresa.dos.sonhos[grep("coca", talentos$Empresa.dos.sonhos)] # 8
 
 talentos$Empresa.dos.sonhos[grep("samsun", talentos$Empresa.dos.sonhos)] # 12
 talentos$Empresa.dos.sonhos[grep("dell", talentos$Empresa.dos.sonhos)] # 6
 talentos$Empresa.dos.sonhos[grep("apple", talentos$Empresa.dos.sonhos)] # 13
 talentos$Empresa.dos.sonhos[grep("motorola", talentos$Empresa.dos.sonhos)] # 11
 
-talentos$Empresa.dos.sonhos[grep("netflix", talentos$Empresa.dos.sonhos)] # 2
 
+talentos$Empresa.dos.sonhos[grep("google", talentos$Empresa.dos.sonhos)] # 143
+talentos$Empresa.dos.sonhos[grep("micro", talentos$Empresa.dos.sonhos)] # 25
 talentos$Empresa.dos.sonhos[grep("face", talentos$Empresa.dos.sonhos)] # 6
-
 talentos$Empresa.dos.sonhos[grep("yahoo", talentos$Empresa.dos.sonhos)] # 1
-
 talentos$Empresa.dos.sonhos[grep("amaz", talentos$Empresa.dos.sonhos)] # 6
-
 talentos$Empresa.dos.sonhos[grep("siemens", talentos$Empresa.dos.sonhos)] # 10
 
 talentos$Empresa.dos.sonhos[grep("nintendo", talentos$Empresa.dos.sonhos)] # 4
+talentos$Empresa.dos.sonhos[grep("netflix", talentos$Empresa.dos.sonhos)] # 2
 
-talentos$Empresa.dos.sonhos[grep("clear", talentos$Empresa.dos.sonhos)] # 2
-
+talentos$Empresa.dos.sonhos[grep("natura", talentos$Empresa.dos.sonhos)] # 38
 talentos$Empresa.dos.sonhos[grep("johns", talentos$Empresa.dos.sonhos)] # 8
-
-talentos$Empresa.dos.sonhos[grep("azul", talentos$Empresa.dos.sonhos)] # 6
 
 talentos$Empresa.dos.sonhos[grep("nike", talentos$Empresa.dos.sonhos)] # 1
 
-talentos$Empresa.dos.sonhos[grep("tesla", talentos$Empresa.dos.sonhos)] # 12
-
 talentos$Empresa.dos.sonhos[grep("vale", talentos$Empresa.dos.sonhos)] # 5
+
+### Filtrando a Variável Interesses
+
+length(table(talentos$Interesses)) # 2575 respostas diferentes
 
 
 ### Filtrando a Variável Referência  
@@ -241,6 +265,9 @@ talentos$Referência[grep("feira", talentos$Referência)]
   # Grupos da UNICAMP
 talentos$Referência[grep("mej", talentos$Referência)]
 talentos$Referência[grep("mte", talentos$Referência)]
+
+#  REGISTRANDO CHAVE DO GOOGLE MAPS CLOUD
+register_google(key = "AIzaSyDAD0sTlJknu5XIQIIQvUJD-c3NS0q3Ys0")
 
 # Gera o mapa mundi destacando os países nos quais houve a presença de participantes na feira 
 Countries <- c("Afghanistan", "Albania", "Angola", "Bahamas", "Brazil", "Brunei", "Colombia", "United States", "Guadeloupe", "Haiti", "Italy", "Laos", "Nigeria", "Peru", "Qatar", "Dominican Republic", "Sweden", "Venezuela")
@@ -302,7 +329,7 @@ dados[city %in% cities] <- Qtd.Participantes.sp
 intervalos <- c(-Inf, 1, 10, 50, 100, 200, Inf)
 cortes <- cut(dados, intervalos, include.lowest = TRUE) 
 niveis <- levels(cortes)
-cores <- heat.colors(length(niveis))
+cores <- rainbow(length(niveis))
 levels(cortes) <- cores
 
 plot(municipios, lwd=.1, axes = FALSE, las = 1, col=as.character(cortes))
@@ -327,3 +354,11 @@ plot(C)
 # https://www.youtube.com/watch?v=GMi1ThlGFMo
 # https://plot.ly/r/
 
+# Perfil dos participantes?
+
+# Meios de Comunicação mais efetivos? 
+
+# Quais empresas trazer para a feira?
+  
+
+talentos$
