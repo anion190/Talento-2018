@@ -54,8 +54,10 @@ chart_link <- api_create(graph, filename = "cities", fileopt = 'overwrite')
 chart_link
 
 # GRÁFICO DE BARRA DAS ÁREAS DE ATUAÇÃO DAS EMPRESAS DOS SONHOS (DESTAQUE PARA 10 PRIMEIRAS)
-areas.atuacao <- read.csv("~/areas_de_atuacao")
-areas.atuacao <- areas.atuacao[order(areas.atuacao$total, decreasing = TRUE),]
+areas.atuacao <- read.csv("~/areas_de_atuacao", stringsAsFactors = FALSE)
+areas.atuacao <- areas.atuacao[order(areas.atuacao$total, decreasing = TRUE)[1:10],]
+areas.atuacao$area <- as.factor(areas.atuacao$area)
+
 graph <- plot_ly(areas.atuacao, x = ~total, y = ~area, type = 'bar', orientation = 'h',
                  marker = list(color = c('rgba(222,45,38,0.8)', 'rgb(158, 202, 225)', 'rgb(158, 202, 225)',
                                          'rgb(158, 202, 225)', 'rgb(158, 202, 225)',
@@ -63,20 +65,218 @@ graph <- plot_ly(areas.atuacao, x = ~total, y = ~area, type = 'bar', orientation
                                          'rgb(158, 202, 225)', 'rgb(158, 202, 225)'))) %>% 
   layout(title = "Áreas de atuação das empresas dos sonhos",
          xaxis = list(title = "Qtd de Interessados"), 
-         yaxis = list(title = "Áreas"))#%>%
+         yaxis = list(title = "Áreas")) #%>%
   #add_annotations(xref = 'total', yref = 'area',
-   #               x = data$total,  y = data$area,
-    #              text = paste(data$total),
-    #              font = list(family = 'Arial', size = 12),
-    #              showarrow = FALSE)
+  #                x = areas.atuacao$total,  
+  #                y = areas.atuacao$area,
+  #                text = paste(areas.atuacao$total),
+  #                font = list(family = 'Arial', size = 12),
+  #                showarrow = FALSE)
 
 chart_link <- api_create(graph, filename = "atuationarea", fileopt = 'overwrite')
 chart_link
 
+# GRÁFICO DAS 10 UNIVERSIDADES COM MAIS ESTUDANTES NA TALENTO 2018 
+
+universidades <- table(talentos$Universidade)[order(table(talentos$Universidade), decreasing = TRUE)][1:11]
+
+faculs <- c("unicamp", "puccamp", "unip", "anhanguera", "facamp", "metrocamp", "esamc", "unisal", "usp sp", "unesp")
+estudantes <- c(2692, 206, 133, 90, 73, 58, 43, 30, 29, 26)
+dados <- data_frame(Universidades = faculs, Num_participantes = estudantes)
+
+graph <- plot_ly(dados, x = ~Universidades, y = ~Num_participantes, type = 'bar',
+                 marker = list(color = c('rgba(222,45,38,0.8)', 'rgb(158, 202, 225)', 'rgb(158, 202, 225)',
+                                         'rgb(158, 202, 225)', 'rgb(158, 202, 225)',
+                                         'rgb(158, 202, 225)','rgb(158, 202, 225)', 'rgb(158, 202, 225)',
+                                         'rgb(158, 202, 225)', 'rgb(158, 202, 225)'))) %>% 
+  layout(title = "Universidades com maior número de estudantes na Talento 2018",
+         xaxis = list(title = "Universidades"), 
+         yaxis = list(title = "Qtd. de Participantes")) #%>%
+ #add_annotations(xref = 'Universidades', yref = 'QtdParticipantes',
+  #              x = dados$Universidades,  y = dados$Num_participantes,
+   #            text = paste(dados$Num_participantes),
+    #           font = list(family = 'Arial', size = 12),
+     #          showarrow = FALSE)
+
+chart_link <- api_create(graph, filename = "university", fileopt = 'overwrite')
+chart_link
+
+
+# GRÁFICO DOS GÊNEROS
+
+gender <- as.data.frame(table(talentos$Gênero))
+
+p <- plot_ly(gender, labels = ~Var1, values = ~Freq, type = 'pie') %>% 
+  layout(title = "Gênero do público da Talento",
+         xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
+         yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
+
+chart_link <- api_create(p, filename = "gender")
+chart_link
+
+# GRÁFICOS DO GÊNERO, SITUAÇÃO E NÍVEL DE INGLÊS
+
+gender <- as.data.frame(table(talentos$Gênero))
+englishlevel <- as.data.frame(table(talentos$Nível.de.inglês)[-1])
+englishlevel$Var1 <- c("inglês avançado", "inglês básico", "inglês intermediário")
+excel <- data_frame(level = c("excel básico", "excel intermediário", "excel avançado"), num = c(535, 813, 403))
+
+
+p <- plot_ly() %>% 
+  add_pie(data = gender, labels = ~Var1, values = ~Freq,
+          name = "Gênero", domain = list(x = c(0, 0.4), y = c(0.4, 1))) %>% 
+          #textposition = 'inside',
+          #textinfo = 'label+percent',
+          #insidetextfont = list(color = '#FFFFFF'),
+          #hoverinfo = 'text') %>% 
+  add_pie(data = englishlevel, labels = ~Var1, values = ~Freq,
+          name = "Nível de Inglês", domain = list(x = c(0.6, 1), y = c(0.4, 1))) %>% 
+          #textposition = 'inside',
+          #textinfo = 'label+percent',
+          #insidetextfont = list(color = '#FFFFFF'),
+          #hoverinfo = 'text') %>% 
+  add_pie(data = excel, labels = ~level, values = ~num,
+          name = "Nível de Excel", domain = list(x = c(0.25, 0.75), y = c(0, 0.6))) %>% 
+          #textposition = 'inside',
+          #textinfo = 'label+percent',
+          #insidetextfont = list(color = '#FFFFFF'),
+          #hoverinfo = 'text') %>% 
+  layout(title = "Gráficos de setor das variáveis Gênero, Nível de Excel e Nível de Inglês.", showlegend = TRUE,
+         xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
+         yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
+
+chart_link <- api_create(p, filename = "gender-excellevel-englishlevel", fileopt = 'overwrite')
+chart_link
+
+# GRÁFICO DOS CURSOS EXTRAS
+
+cursos.extras <- read.csv("~/cursos_extras", header = F, stringsAsFactors = FALSE)
+cursos.extras <- cursos.extras[-3,]
+cursos.extras <- cursos.extras[order(cursos.extras$V2, decreasing = TRUE)[1:15],]
+cursos.extras$V1 <- as.factor(cursos.extras$V1)
+
+
+p <- plot_ly(data = cursos.extras, labels = ~V1, values = ~V2) %>% 
+  add_pie(hole = 0.6) %>% 
+  layout(title = "15 cursos mais realizados pelo público da Talento 2018", showlegend = TRUE,
+         xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
+         yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
+
+chart_link <- api_create(p, filename = "cursosextras", fileopt = 'overwrite')
+chart_link
+
+
+# GRÁFICO DOS CURSOS 15 PRIMEIROS COM MAIOR NÚMERO DE PARTICIPANTES
+
+cursos.masculinos <- read.csv("~/cursos_masculinos", header = FALSE, stringsAsFactors = FALSE)
+cursos.masculinos <- cursos.masculinos[-1,]
+cursos.femininos <- read.csv("~/cursos_femininos", header = FALSE, stringsAsFactors = FALSE)
+cursos.femininos <- cursos.femininos[-1,]
+dados <- inner_join(cursos.femininos, cursos.masculinos, by = "V1")
+colnames(dados) <- c("cursos", "feminino", "masculino")
+dados$cursos <- as.factor(dados$cursos)
+
+dados1 <- dados[order(dados$feminino+dados$masculino, decreasing = TRUE)[1:15],]
+dados1$cursos <- as.character(dados1$cursos)
+dados1$cursos <- as.factor(dados1$cursos)
+dados2 <- dados[order(dados$feminino+dados$masculino, decreasing = TRUE)[16:29],]
+
+
+p <- plot_ly(dados1, x = ~feminino, y = ~cursos, type = 'bar', orientation = 'h', name = "Qtd. de mulheres no curso") %>% 
+  add_trace(x = ~masculino, name = 'Qtd. de homens no curso') %>% 
+  layout(title = "Número de pessoas nos 15 cursos de maior público",
+         yaxis = list(title = ''),
+         xaxis = list(title = ''),
+         barmode = 'stack',
+        # paper_bgcolor = 'rgba(245, 246, 249, 1)',
+         plot_bgcolor = 'rgba(245, 246, 249, 1)',
+         showlegend = TRUE) #%>%
+   #add_annotations(text = paste("  ", dados1$feminino, dados1$masculino, sep = " "),
+                  #x = dados$feminino,
+                  #y = dados$masculino,
+                  #xref = "x",
+                  #yref = "y",
+                  # font = list(family = 'Arial',
+                   #            size = 14),
+                   #showarrow = FALSE)
+
+chart_link <- api_create(p, filename = 'cursos', fileopt = 'overwrite')
+chart_link
 
 
 
+# GRÁFICO DOS INTERESSES
 
+interesse <- read.csv("~/interesse", header = FALSE, stringsAsFactors = FALSE)
+interesse.female <- read.csv("~/female_interesse", header = FALSE, stringsAsFactors = FALSE)
+dados <- inner_join(interesse.female, interesse, by = 'V1')
+interesse.male <- data.frame(V1 = dados$V1, V2 = dados$V2.y-dados$V2.x)
+dados <- cbind(dados, interesse.male$V2)
+colnames(dados) <- c("interesses", "feminino", "total", "masculino")
+dados1 <- dados[order(dados$total, decreasing = TRUE)[1:15],]
+dados1$interesses <- as.factor(dados1$interesses)
+  
+p <- plot_ly(dados1, x = ~feminino, y = ~interesses, type = 'bar', orientation = 'h', name = "Qtd. de mulheres interessadas") %>% 
+  add_trace(x = ~masculino, name = 'Qtd. de homens interessados') %>% 
+  layout(title = "Número de pessoas nas 15 áreas de maior interesse",
+         yaxis = list(title = ''),
+         xaxis = list(title = ''),
+         barmode = 'stack',
+         paper_bgcolor = 'rgba(245, 246, 249, 1)',
+         plot_bgcolor = 'rgba(245, 246, 249, 1)',
+         showlegend = TRUE) #%>%
+  #add_annotations(text = paste("  ", dados1$feminino, dados1$masculino, sep = " "),
+    #x = dados1$feminino,
+    #y = dados1$masculino,
+    #ref = "x",
+    #yref = "y",
+     #font = list(family = 'Arial',
+      #          size = 14),
+    #showarrow = FALSE)
+
+chart_link <- api_create(p, filename = 'interesses', fileopt = 'overwrite')
+chart_link
+
+
+
+# GRÁFICO DAS REFERÊNCIAS
+
+referencias <- read.csv("~/referencia", header = FALSE)
+referencias <- referencias[order(referencias$V2, decreasing = TRUE)[1:10],]
+referencias$V1 <- as.character(referencias$V1)
+referencias$V1 <- as.factor(referencias$V1)
+
+p <- plot_ly(data = referencias, labels = ~V1, values = ~V2) %>% 
+  add_pie(hole = 0.6) %>% 
+  layout(title = "Pessoas atraídas pelos 10 meios de comunicação mais influentes em %", showlegend = TRUE,
+         xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
+         yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
+  
+chart_link <- api_create(p, filename = "referencias", fileopt = 'overwrite')
+chart_link
+
+# GRÁFICOS DAS 10 EMPRESAS MAIS CITADAS COMO EMPRESAS DOS SONHOS
+
+empresas.dos.sonhos <- read.csv("~/empresas_dos_sonhos", header = TRUE, stringsAsFactors = FALSE)
+empresas.dos.sonhos <- empresas.dos.sonhos[order(empresas.dos.sonhos$Num_Interessados, decreasing = TRUE)[1:15],]
+empresas.dos.sonhos$Empresas <- as.factor(empresas.dos.sonhos$Empresas)
+#areas.atuacao <- read.csv("~/areas_de_atuacao", header = TRUE, stringsAsFactors = FALSE)
+
+p <- plot_ly(data = empresas.dos.sonhos, x = ~Num_Interessados, y = ~Empresas, name = '15 empresas mais citadas como Empresas dos sonhos',
+              type = 'bar', orientation = 'h',
+              marker = list(color = 'rgba(50, 171, 96, 0.6)',
+                            line = list(color = 'rgba(50, 171, 96, 1.0)', width = 1))) %>%
+  layout(title = '15 empresas mais citadas como Empresas dos sonhos',
+         yaxis = list(showgrid = FALSE, showline = FALSE, showticklabels = TRUE, domain= c(0, 0.85)),
+         xaxis = list(zeroline = FALSE, showline = FALSE, showticklabels = TRUE, showgrid = TRUE)) %>%
+  add_annotations(#xref = 'x', yref = 'y',
+                  #x = x_saving * 2.1 + 3,  y = y,
+                  text = paste(empresas.dos.sonhos$Num_Interessados),
+                  font = list(family = 'Arial', size = 12, color = 'rgb(50, 171, 96)'),
+                  showarrow = FALSE)
+
+chart_link = api_create(p, filename="empresasdossonhos", fileopt = 'overwrite')
+chart_link
 
 # Variável Estado
 
@@ -353,6 +553,7 @@ plot(C)
 # https://www.youtube.com/watch?v=PTti7OMbURo
 # https://www.youtube.com/watch?v=GMi1ThlGFMo
 # https://plot.ly/r/
+# https://rstudio.github.io/dygraphs/
 
 # Perfil dos participantes?
 
