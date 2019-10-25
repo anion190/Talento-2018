@@ -8,11 +8,25 @@ library(rgdal)
 Sys.setenv("plotly_username"="GArtoni")
 Sys.setenv("plotly_api_key"="pwkWStQnkoQLOiFC7ZIz")
 
-talentos <- as_tibble(read.csv("~/Downloads/final.csv",header = T,sep = ",", stringsAsFactors = F))
+talentos <- as_tibble(read.csv("~/Downloads/2sem19/ME415/dados/analise1/final.csv",header = T,sep = ",", stringsAsFactors = F))
 
 str(talentos)
 
 # 4509 observações de 16 variáveis
+
+#  REGISTRANDO CHAVE DO GOOGLE MAPS CLOUD
+register_google(key = "AIzaSyDAD0sTlJknu5XIQIIQvUJD-c3NS0q3Ys0")
+
+# Gera o mapa mundi destacando os países nos quais houve a presença de participantes na feira 
+Countries <- c("Afghanistan", "Albania", "Angola", "Bahamas", "Brazil", "Brunei", "Colombia", "United States", "Guadeloupe", "Haiti", "Italy", "Laos", "Nigeria", "Peru", "Qatar", "Dominican Republic", "Sweden", "Venezuela")
+paises <- as.data.frame(cbind(Countries, table(talentos$País)[-1]), stringsAsFactors = F) 
+colnames(paises) <- c("Países", "Qtd.Participantes")
+row.names(paises) <- c()
+P <- gvisGeoChart(data = paises, locationvar = "Países", colorvar = "Qtd.Participantes", options = list(width = 700, height = 700))
+T <- gvisTable(paises, options = list(width = 300, height = 500))
+PT <- gvisMerge(P, T, horizontal = TRUE)
+plot(PT)
+
 
 ### Variável Cidade 
 
@@ -54,7 +68,7 @@ chart_link <- api_create(graph, filename = "cities", fileopt = 'overwrite')
 chart_link
 
 # GRÁFICO DE BARRA DAS ÁREAS DE ATUAÇÃO DAS EMPRESAS DOS SONHOS (DESTAQUE PARA 10 PRIMEIRAS)
-areas.atuacao <- read.csv("~/areas_de_atuacao", stringsAsFactors = FALSE)
+areas.atuacao <- read.csv("~/Downloads/2sem19/ME415/dados/analise1/areas_de_atuacao", stringsAsFactors = FALSE)
 areas.atuacao <- areas.atuacao[order(areas.atuacao$total, decreasing = TRUE)[1:10],]
 areas.atuacao$area <- as.factor(areas.atuacao$area)
 
@@ -465,19 +479,6 @@ talentos$Referência[grep("feira", talentos$Referência)]
   # Grupos da UNICAMP
 talentos$Referência[grep("mej", talentos$Referência)]
 talentos$Referência[grep("mte", talentos$Referência)]
-
-#  REGISTRANDO CHAVE DO GOOGLE MAPS CLOUD
-register_google(key = "AIzaSyDAD0sTlJknu5XIQIIQvUJD-c3NS0q3Ys0")
-
-# Gera o mapa mundi destacando os países nos quais houve a presença de participantes na feira 
-Countries <- c("Afghanistan", "Albania", "Angola", "Bahamas", "Brazil", "Brunei", "Colombia", "United States", "Guadeloupe", "Haiti", "Italy", "Laos", "Nigeria", "Peru", "Qatar", "Dominican Republic", "Sweden", "Venezuela")
-paises <- as.data.frame(cbind(Countries, table(talentos$País)[-1]), stringsAsFactors = F) 
-colnames(paises) <- c("Países", "Qtd.Participantes")
-row.names(paises) <- c()
-P <- gvisGeoChart(data = paises, locationvar = "Países", colorvar = "Qtd.Participantes", options = list(width = 700, height = 700))
-T <- gvisTable(paises, options = list(width = 300, height = 500))
-PT <- gvisMerge(P, T, horizontal = TRUE)
-plot(PT)
 
 #######################################################################
 
