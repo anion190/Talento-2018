@@ -4,18 +4,11 @@ library(ggmap)
 library(plotly)
 library(rgdal)
 
-# PERMITE UTILIZAR O PLOTLY
-Sys.setenv("plotly_username"="GArtoni")
-Sys.setenv("plotly_api_key"="pwkWStQnkoQLOiFC7ZIz")
-
 talentos <- as_tibble(read.csv("~/Downloads/2sem19/ME415/dados/analise1/final.csv",header = T,sep = ",", stringsAsFactors = F))
 
 str(talentos)
 
 # 4509 observações de 16 variáveis
-
-#  REGISTRANDO CHAVE DO GOOGLE MAPS CLOUD
-register_google(key = "AIzaSyDAD0sTlJknu5XIQIIQvUJD-c3NS0q3Ys0")
 
 # Gera o mapa mundi destacando os países nos quais houve a presença de participantes na feira 
 Countries <- c("Afghanistan", "Albania", "Angola", "Bahamas", "Brazil", "Brunei", "Colombia", "United States", "Guadeloupe", "Haiti", "Italy", "Laos", "Nigeria", "Peru", "Qatar", "Dominican Republic", "Sweden", "Venezuela")
